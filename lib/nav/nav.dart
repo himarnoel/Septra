@@ -1,7 +1,9 @@
-import 'package:ecom_app/nav/categories.dart';
-import 'package:ecom_app/nav/home.dart';
-import 'package:ecom_app/nav/profile.dart';
+
 import 'package:flutter/material.dart';
+import 'package:septra/nav/home.dart';
+import 'package:septra/nav/profile.dart';
+
+import 'categories.dart';
 
 class Nav extends StatefulWidget {
   static String id = "nav";

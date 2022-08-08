@@ -1,7 +1,9 @@
-import 'package:ecom_app/nav/items/model.dart';
-import 'package:ecom_app/nav/items/place.dart';
-import 'package:ecom_app/utils/helpers.dart';
+
 import 'package:flutter/material.dart';
+import 'package:septra/nav/items/place.dart';
+
+import '../utils/helpers.dart';
+import 'items/model.dart';
 
 class Home extends StatefulWidget {
   static String id = "Home";

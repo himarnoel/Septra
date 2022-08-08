@@ -1,10 +1,10 @@
-import 'package:ecom_app/slider/caro.dart';
-import 'package:ecom_app/utils/helpers.dart';
+
 import 'package:flutter/material.dart';
 
 import '../component/btn.dart';
 import '../nav/home.dart';
 import '../nav/nav.dart';
+import '../utils/helpers.dart';
 
 class Login extends StatefulWidget {
   static String id = "Login";

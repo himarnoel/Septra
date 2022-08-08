@@ -1,6 +1,7 @@
-import 'package:ecom_app/nav/detail.dart';
+
 import 'package:flutter/material.dart';
 import '../pages/land.dart';
+import 'detail.dart';
 
 class Categories extends StatefulWidget {
   const Categories({Key? key}) : super(key: key);

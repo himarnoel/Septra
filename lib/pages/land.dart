@@ -1,8 +1,10 @@
-import 'package:ecom_app/component/btn.dart';
-import 'package:ecom_app/component/btn.dart';
-import 'package:ecom_app/pages/signin.dart';
-import 'package:ecom_app/pages/signup.dart';
+
+
 import 'package:flutter/material.dart';
+
+import '../component/btn.dart';
+import 'signin.dart';
+import 'signup.dart';
 
 class Land extends StatelessWidget {
   static String id = "/";

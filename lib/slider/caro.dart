@@ -1,4 +1,4 @@
-import 'package:ecom_app/slider/slide.dart';
+
 import 'package:flutter/material.dart';
 
 import 'dart:async';
@@ -7,6 +7,7 @@ import '../component/btn.dart';
 import '../pages/land.dart';
 import 'dot.dart';
 import 'item.dart';
+import 'slide.dart';
 
 class Caoursel extends StatefulWidget {
   static String id = "Caro";

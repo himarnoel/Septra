@@ -1,15 +1,15 @@
 
 
-import 'package:ecom_app/nav/nav.dart';
-import 'package:ecom_app/pages/land.dart';
-import 'package:ecom_app/pages/signin.dart';
-import 'package:ecom_app/pages/signup.dart';
-import 'package:ecom_app/slider/caro.dart';
+import 'package:septra/nav/nav.dart';
+import 'package:septra/pages/land.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'nav/home.dart';
-import 'utils/helpers.dart';
+import 'pages/signin.dart';
+import 'pages/signup.dart';
+import 'slider/caro.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

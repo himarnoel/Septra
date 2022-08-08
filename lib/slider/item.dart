@@ -1,5 +1,7 @@
-import 'package:ecom_app/slider/slide.dart';
+
 import 'package:flutter/material.dart';
+
+import 'slide.dart';
 
 class SliderItem extends StatelessWidget {
   final int index;
