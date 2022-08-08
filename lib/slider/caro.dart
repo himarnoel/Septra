@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'dart:async';
@@ -96,8 +95,6 @@ class _CaourselState extends State<Caoursel> {
                     children: [
                       Buttonn(
                         texp: "Next",
-                        height: height / 12,
-                        width: width / 1.1,
                         text: text * 20,
                         onPressed: () {
                           Navigator.pushNamed(context, Land.id);

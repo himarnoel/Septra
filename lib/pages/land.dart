@@ -1,6 +1,5 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:septra/Service/Other_Service/gate.dart';
 
 import '../component/btn.dart';
 import 'signin.dart';
@@ -54,12 +53,10 @@ class Land extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Buttonn(
-                            height: height / 12,
-                            width: width / 1.1,
                             text: text * 18,
                             texp: "Login",
                             onPressed: () {
-                              Navigator.pushNamed(context, Login.id);
+                              Navigator.pushNamed(context, Gate.id);
                             }),
                       ),
                       Buttons(

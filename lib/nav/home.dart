@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:septra/Service/auth/auth.dart';
 import 'package:septra/nav/items/place.dart';
 
 import '../utils/helpers.dart';
@@ -14,6 +14,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final Auth _auth = Auth();
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -28,10 +29,15 @@ class _HomeState extends State<Home> {
           elevation: 0,
           backgroundColor: Colors.white,
           actions: [
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.grey.shade300,
-              backgroundImage: const AssetImage("lib/images/logo/log.png"),
+            GestureDetector(
+              onTap: () {
+                _auth.signOut();
+              },
+              child: CircleAvatar(
+                radius: 20,
+                backgroundColor: Colors.grey.shade300,
+                backgroundImage: const AssetImage("lib/images/logo/log.png"),
+              ),
             ),
             const SizedBox(
               width: 10,

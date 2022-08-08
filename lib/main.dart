@@ -1,5 +1,4 @@
-
-
+import 'package:septra/Service/Other_Service/gate.dart';
 import 'package:septra/nav/nav.dart';
 import 'package:septra/pages/land.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,13 +9,12 @@ import 'pages/signin.dart';
 import 'pages/signup.dart';
 import 'slider/caro.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-);
- 
+  );
+
   runApp(const MyApp());
 }
 
@@ -48,6 +46,7 @@ class MyApp extends StatelessWidget {
           Caoursel.id: (context) => const Caoursel(),
           Nav.id: (context) => const Nav(),
           Home.id: (context) => const Home(),
+          Gate.id: (context) => const Gate()
         });
   }
 }

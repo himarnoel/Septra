@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 
+import '../Service/auth/auth.dart';
 import '../component/btn.dart';
 import '../nav/home.dart';
 import '../nav/nav.dart';
@@ -16,6 +16,12 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  bool _passwordVisible = true;
+  final _formkey = GlobalKey<FormState>();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _pass = TextEditingController();
+  final TextEditingController _controller2 = TextEditingController();
+  final Auth _auth = Auth();
   SizeConfig size = SizeConfig();
   @override
   Widget build(BuildContext context) {
@@ -32,9 +38,7 @@ class _LoginState extends State<Login> {
           elevation: 0,
           centerTitle: true,
           title: const Text(
-            "Login",
-            style: TextStyle(
-                fontSize: 40, color: Colors.black, fontWeight: FontWeight.bold),
+            "Login",    style: TextStyle(           fontSize: 40, color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ),
         body: LayoutBuilder(
@@ -57,21 +61,23 @@ class _LoginState extends State<Login> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Input(
+                            control: _email,
                             obscured: false,
                             keyboardType: TextInputType.emailAddress,
-                            hintpext: "Email",
+                            hintpext: "Email", valid: (value) {  },
                           ),
                           Input(
+                            control: _pass,
                             obscured: true,
                             keyboardType: TextInputType.visiblePassword,
-                            hintpext: "Password",
+                            hintpext: "Password", valid: (value) {  },
                           ),
                           Buttonn(
-                            height: height / 12,
-                            width: width / 1.1,
+                          
                             text: text * 20,
                             texp: "Login",
                             onPressed: () {
+                              // _auth.login(_email.text.trim(), _pass.text.trim(), context);
                               Navigator.pushNamed(context, Nav.id);
                             },
                           ),
@@ -86,8 +92,7 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     Buttonn(
-                      height: height / 12,
-                      width: width / 1.1,
+                     
                       text: text * 20,
                       texp: "Sign in with Google",
                       onPressed: () {
@@ -98,8 +103,7 @@ class _LoginState extends State<Login> {
                       height: getProportionateScreenHeight(10),
                     ),
                     Buttonn(
-                      height: height / 12,
-                      width: width / 1.1,
+                     
                       text: text * 20,
                       texp: " Sign in with Facebook",
                       onPressed: () {
