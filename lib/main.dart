@@ -4,7 +4,7 @@ import 'package:septra/nav/nav.dart';
 import 'package:septra/pages/land.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
+import 'firebase_options.dart';
 import 'nav/home.dart';
 import 'pages/signin.dart';
 import 'pages/signup.dart';
@@ -13,9 +13,10 @@ import 'slider/caro.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+);
  
-
   runApp(const MyApp());
 }
 
