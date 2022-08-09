@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:septra/Service/Other_Service/gate.dart';
 
 import '../component/btn.dart';
-import 'signin.dart';
+
 import 'signup.dart';
 
 class Land extends StatelessWidget {
@@ -32,13 +32,13 @@ class Land extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Spacer(),
+                  const Spacer(),
                   Image.asset(
                     "lib/images/logo/log.png",
                     scale: 6,
                   ),
                   const Text("Get the best of your Gadget here"),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   const Padding(
                     padding: EdgeInsets.all(10.0),
                     child: Text(
@@ -46,7 +46,7 @@ class Land extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [

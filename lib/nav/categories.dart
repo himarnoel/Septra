@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import '../pages/land.dart';
-import 'detail.dart';
+import '../pages/detail.dart';
 
 class Categories extends StatefulWidget {
   const Categories({Key? key}) : super(key: key);
@@ -20,12 +20,12 @@ class _CategoriesState extends State<Categories> {
         Center(
             child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Detail(),
-                    ),
-                  );
+                  // Navigator.pushReplacement(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => Detail(),
+                  //   ),
+                  // );
                 },
                 child: const Text("Nav"))),
       ],

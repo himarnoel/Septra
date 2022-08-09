@@ -1,5 +1,6 @@
 import 'package:septra/Service/Other_Service/gate.dart';
 import 'package:septra/nav/nav.dart';
+import 'package:septra/pages/Cart/cart.dart';
 import 'package:septra/pages/land.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
+          scaffoldBackgroundColor: Colors.white,
+          appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
           // This is the theme of your application.
           // Try running your application with "flutter run". You'll see the
           // application has a blue toolbar. Then, without quitting the app, try
@@ -46,7 +49,8 @@ class MyApp extends StatelessWidget {
           Caoursel.id: (context) => const Caoursel(),
           Nav.id: (context) => const Nav(),
           Home.id: (context) => const Home(),
-          Gate.id: (context) => const Gate()
+          Gate.id: (context) => const Gate(),
+          Cart.id: (context) => const Cart()
         });
   }
 }

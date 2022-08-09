@@ -1,39 +1,18 @@
+import 'dart:convert';
+
 class Product {
-  final String image, name, price;
+  final String image;
+  final String name;
+  final String price;
   Product({required this.name, required this.image, required this.price});
+
+  factory Product.fromMap(Map<String, dynamic> map) {
+    return Product(
+      image: map['image'] ?? '',
+      name: map['name'] ?? '',
+      price: map['price'] ?? '',
+    );
+  }
 }
 
-List list = [
-  Product(
-      name: "MacBook Pro",
-      image: "lib/images/land/items/pg4.png",
-      price: "\$200"),
-  Product(
-      name: "MacBook Pro",
-      image: "lib/images/land/items/pg2.png",
-      price: "\$200"),
-  Product(
-      name: "MacBook Pro",
-      image: "lib/images/land/items/pg3.png",
-      price: "\$200"),
-  Product(
-      name: "MacBook Pro",
-      image: "lib/images/land/items/pg1.png",
-      price: "\$200"),
-  Product(
-      name: "MacBook Pro",
-      image: "lib/images/land/last/pg1.png",
-      price: "\$200"),
-  Product(
-      name: "MacBook Pro",
-      image: "lib/images/land/last/pg2.png",
-      price: "\$200"),
-  Product(
-      name: "MacBook Pro",
-      image: "lib/images/land/last/pg3.png",
-      price: "\$200"),
-  Product(
-      name: "MacBook Pro",
-      image: "lib/images/land/last/pg3.png",
-      price: "\$200"),
-];
+List<Product> list = [];

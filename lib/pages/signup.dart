@@ -189,11 +189,17 @@ class _SignupState extends State<Signup> {
                   text: text * 20,
                   onPressed: () {
                     if (_formkey.currentState!.validate()) {
-                      _auth.signup(
+                      dynamic val = _auth.signup(
                           _emailCont.text.trim(),
                           _passcont.text.trim(),
                           context,
                           _namecont.text.trim());
+                     
+                      if (val == null) {
+                        setState(() {
+                          Navigator.pop(context);
+                        });
+                      }
                     }
                   },
                   texp: "Signup",

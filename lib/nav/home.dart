@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:septra/Service/auth/auth.dart';
+
 import 'package:septra/nav/items/place.dart';
 
+import '../pages/Cart/cart.dart';
 import '../utils/helpers.dart';
 import 'items/model.dart';
 
@@ -14,6 +18,46 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final FirebaseFirestore _get = FirebaseFirestore.instance;
+
+  fetch() {
+    try {
+      if (list.isNotEmpty) {
+        list.clear();
+        _get
+            .collection("Products")
+            .get()
+            .then((value) => value.docs.forEach((e) {
+                  debugPrint(e.data().toString());
+
+                  list.add(Product.fromMap(e.data()));
+                  setState(() {});
+                }));
+        setState(() {});
+      } else {
+        _get
+            .collection("Products")
+            .get()
+            .then((value) => value.docs.forEach((e) {
+                  debugPrint(e.data().toString());
+
+                  list.add(Product.fromMap(e.data()));
+                  setState(() {});
+                }));
+        setState(() {});
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetch();
+  }
+
   final Auth _auth = Auth();
   @override
   Widget build(BuildContext context) {
@@ -29,18 +73,35 @@ class _HomeState extends State<Home> {
           elevation: 0,
           backgroundColor: Colors.white,
           actions: [
-            GestureDetector(
-              onTap: () {
-                _auth.signOut();
-              },
-              child: CircleAvatar(
-                radius: 20,
-                backgroundColor: Colors.grey.shade300,
-                backgroundImage: const AssetImage("lib/images/logo/log.png"),
-              ),
+            Stack(
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, Cart.id);
+                    },
+                    icon: const Icon(
+                      Icons.shopping_cart,
+                      size: 30,
+                    )),
+                Padding(
+                  padding: const EdgeInsets.only(top: 6.0, left: 30),
+                  child: Container(
+                      height: getProportionateScreenHeight(18),
+                      width: getProportionateScreenWidth(18),
+                      child: Center(
+                        child: Text(
+                          "5",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.red.shade500)),
+                )
+              ],
             ),
             const SizedBox(
-              width: 10,
+              width: 20,
             )
           ],
           actionsIconTheme: const IconThemeData(color: Colors.black),
@@ -135,13 +196,14 @@ class _HomeState extends State<Home> {
                 SizedBox(
                   height: height / 23,
                 ),
-                SizedBox(
-                  height: height * 1.3,
+                Container(
+                  height: height / 1.7,
                   width: width,
+                  color: Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GridView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
+                        physics: const AlwaysScrollableScrollPhysics(),
                         itemCount: list.length,
                         padding: const EdgeInsets.all(8),
                         gridDelegate:
@@ -150,7 +212,7 @@ class _HomeState extends State<Home> {
                                 childAspectRatio: 0.75,
                                 mainAxisSpacing: 10,
                                 crossAxisCount: 2),
-                        itemBuilder: (_, i) => Place(i)),
+                        itemBuilder: (_, i) => Place(index: i)),
                   ),
                 )
               ],

@@ -1,10 +1,8 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:septra/Service/auth/store.dart';
-
 
 class Auth {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -23,6 +21,7 @@ class Auth {
           email: email, password: password);
       print(email);
       _store.db(_user.user!.uid.toString(), name, email);
+      return null;
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "email-already-in-use":
@@ -114,7 +113,6 @@ class Auth {
     }
   }
 
- 
   signOut() async {
     await _auth.signOut();
   }

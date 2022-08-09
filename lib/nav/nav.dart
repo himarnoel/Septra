@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:septra/nav/home.dart';
 import 'package:septra/nav/profile.dart';
@@ -37,8 +36,6 @@ class _NavState extends State<Nav> {
       bottomNavigationBar: BottomNavigationBar(
           unselectedItemColor: Colors.grey,
           selectedItemColor: Colors.black,
-          selectedIconTheme: IconThemeData(size: 35),
-          selectedFontSize: 17,
           onTap: (index) {
             setState(() {
               i = index;
@@ -47,9 +44,9 @@ class _NavState extends State<Nav> {
           currentIndex: i,
           type: BottomNavigationBarType.fixed,
           items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.menu), label: "Categories"),
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.shopping_cart), label: "Cart"),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile")
           ]),
     );

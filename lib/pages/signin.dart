@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../Service/auth/auth.dart';
 import '../component/btn.dart';
-import '../nav/home.dart';
 import '../nav/nav.dart';
 import '../utils/helpers.dart';
 
@@ -16,8 +15,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  bool _passwordVisible = true;
-  final _formkey = GlobalKey<FormState>();
+  final bool _passwordVisible = true;
   final TextEditingController _email = TextEditingController();
   final TextEditingController _pass = TextEditingController();
   final TextEditingController _controller2 = TextEditingController();
