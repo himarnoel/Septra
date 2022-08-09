@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:septra/pages/Cart/addtoCart.dart';
 
 import 'package:septra/utils/helpers.dart';
 
 import 'Cart/cart.dart';
-
-
 
 class Detail extends StatefulWidget {
   static String id = "detail";
@@ -23,8 +25,28 @@ class Detail extends StatefulWidget {
 }
 
 class _DetailState extends State<Detail> {
+  var length = 0;
+  fetch() {
+    var documentStream = FirebaseFirestore.instance
+        .collection('Cart')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .snapshots()
+        .listen((event) {
+      length = event.data()!['cart'].length;
+      setState(() {});
+    });
+  }
+
+  final AddtoCart _addtoCart = AddtoCart();
   int val = 1;
   SizeConfig sizeConfig = SizeConfig();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetch();
+  }
+
   @override
   Widget build(BuildContext context) {
     sizeConfig.init(context);
@@ -43,21 +65,23 @@ class _DetailState extends State<Detail> {
                     Icons.shopping_cart,
                     size: 30,
                   )),
-              Padding(
-                padding: const EdgeInsets.only(top: 6.0, left: 30),
-                child: Container(
-                    height: getProportionateScreenHeight(18),
-                    width: getProportionateScreenWidth(18),
-                    child:  Center(
-                      child: Text(
-                        "5",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.red.shade500)),
-              )
+              length == 0
+                  ? SizedBox()
+                  : Padding(
+                      padding: const EdgeInsets.only(top: 6.0, left: 30),
+                      child: Container(
+                          height: getProportionateScreenHeight(18),
+                          width: getProportionateScreenWidth(18),
+                          child: Center(
+                            child: Text(
+                              length.toString(),
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.red.shade500)),
+                    )
             ],
           ),
           const SizedBox(
@@ -204,7 +228,8 @@ class _DetailState extends State<Detail> {
                           ),
                           subtitle: Text(
                             "\$ ${widget.price}",
-                            style: const TextStyle(fontSize: 18, color: Colors.black),
+                            style: const TextStyle(
+                                fontSize: 18, color: Colors.black),
                           ),
                         ),
                       ),
@@ -215,7 +240,12 @@ class _DetailState extends State<Detail> {
                                   getProportionateScreenHeight(60)),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
-                          onPressed: () {},
+                          onPressed: () {
+                            _addtoCart.addtoCart(
+                                name: widget.name,
+                                image: widget.image,
+                                price: widget.price);
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: const [

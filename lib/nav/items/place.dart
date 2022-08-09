@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:septra/error/error.dart';
 
 import 'package:septra/pages/detail.dart';
 
@@ -51,6 +52,9 @@ class Place extends StatelessWidget {
             Image.network(
               list[index].image,
               scale: 8,
+              errorBuilder: (BuildContext, Object, StackTrace) {
+                return Text("Network Error");
+              },
             ),
             Container(
               height: height / 8,
