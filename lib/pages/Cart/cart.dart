@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:septra/Service/auth/auth.dart';
@@ -17,8 +19,31 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
+  fetch() {
+    model.clear();
+    var documentStream = FirebaseFirestore.instance
+        .collection('Cart')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .snapshots()
+        .listen((event) {
+      event.data()!['cart'].forEach(
+        (e) {
+          model.add(CartModel.fromMap(e));
+        },
+      );
+      setState(() {});
+    });
+  }
+
   int val = 1;
   final SizeConfig size = SizeConfig();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetch();
+  }
+
   @override
   Widget build(BuildContext context) {
     size.init(context);
@@ -29,11 +54,14 @@ class _CartState extends State<Cart> {
       ),
       body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewport) {
-        return ListView.builder(
-          itemCount: model.length,
-          itemBuilder: (context, index) {
-            return CartCard(viewport: viewport, i: index);
-          },
+        return Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: ListView.builder(
+            itemCount: model.length,
+            itemBuilder: (context, index) {
+              return CartCard(viewport: viewport, i: index);
+            },
+          ),
         );
       }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -44,16 +72,10 @@ class _CartState extends State<Cart> {
           children: [
             const Expanded(
               child: ListTile(
-                title: Text(
-                  "Total Price",
-                  style: TextStyle(fontSize: 14, color: Colors.black),
-                ),
+                title: Text("Total Price"),
                 subtitle: Text(
                   "\$585.00",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
             ),

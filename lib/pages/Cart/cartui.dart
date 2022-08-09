@@ -25,12 +25,13 @@ class _CartCardState extends State<CartCard> {
     sizeConfig.init(context);
     return ConstrainedBox(
       constraints: BoxConstraints(
-        minHeight: 150,
+        minHeight: 120,
       ),
       child: IntrinsicHeight(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+          
             Center(
               child: Container(
                 height: getProportionateScreenHeight(120),
@@ -56,7 +57,7 @@ class _CartCardState extends State<CartCard> {
                     Container(
                       height: getProportionateScreenHeight(100),
                       width: getProportionateScreenWidth(100),
-                      child: Image.asset(
+                      child: Image.network(
                         model[widget.i].image,
                         scale: 8,
                       ),
@@ -71,12 +72,12 @@ class _CartCardState extends State<CartCard> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             SizedBox(
-                              width: getProportionateScreenWidth(20),
+                              width: getProportionateScreenWidth(8),
                             ),
                             Text(
                               model[widget.i].name,
                               style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500),
+                                  fontSize: 12, fontWeight: FontWeight.w500),
                             ),
                             SizedBox(
                               width: getProportionateScreenWidth(40),

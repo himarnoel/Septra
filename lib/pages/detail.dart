@@ -25,6 +25,7 @@ class Detail extends StatefulWidget {
 }
 
 class _DetailState extends State<Detail> {
+  var store = FirebaseFirestore.instance.collection('Cart');
   var length = 0;
   fetch() {
     var documentStream = FirebaseFirestore.instance
@@ -187,6 +188,10 @@ class _DetailState extends State<Detail> {
                                   iconSize: 18,
                                   splashRadius: 10,
                                   onPressed: () {
+                                    store
+                                        .doc(FirebaseAuth
+                                            .instance.currentUser!.uid)
+                                        .update({"Quantity": val});
                                     val++;
                                     setState(() {});
                                   },
