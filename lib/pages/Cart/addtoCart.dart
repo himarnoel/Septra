@@ -63,6 +63,7 @@ class AddtoCart with ChangeNotifier {
     required name,
     required int price,
     required int quantity,
+    required bool whatSign
   }) async {
     var val;
     var doc = await _store
@@ -81,7 +82,7 @@ class AddtoCart with ChangeNotifier {
           .doc(name)
           .update({"price": price, "Quantity": quantity});
       Fluttertoast.showToast(
-          msg: "Added 1 quantity",
+          msg: whatSign?"Added 1 quantity":"Removed 1 quantity",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,

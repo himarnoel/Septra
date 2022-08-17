@@ -191,10 +191,21 @@ class _DetailState extends State<Detail> {
                                   onPressed: () {
                                     val++;
                                     _addtoCart.updateQuantity(
+                                        whatSign: true,
                                         name: widget.name,
-                                        price: widget.price,
+                                        price: widget.price * val,
                                         quantity: val);
                                     setState(() {});
+
+                                    //     val = widget.i["Quantity"];
+                                    // val++;
+                                    // var price = widget.i["price"] * val;
+                                    // _addtoCart.updateQuantity(
+                                    //     whatSign: true,
+                                    //     name: widget.i["name"],
+                                    //     price: price,
+                                    //     quantity: val);
+                                    // setState(() {});
                                   },
                                   icon: const Icon(
                                     Icons.add,
@@ -208,16 +219,28 @@ class _DetailState extends State<Detail> {
                               IconButton(
                                   splashRadius: 10,
                                   onPressed: () {
-                                    val--;
-                                    // updateQuatityDetail(quantity: val);
-                                    if (val <= 0) {
-                                      val = 0;
-                                    }
-                                    _addtoCart.updateQuantity(
-                                        name: widget.name,
-                                        price: widget.price,
-                                        quantity: val);
-                                    setState(() {});
+                                    FirebaseFirestore.instance
+                                        .collection('Cart')
+                                        .doc(FirebaseAuth
+                                            .instance.currentUser!.uid)
+                                        .collection("cart")
+                                        .doc(widget.name)
+                                        .snapshots()
+                                        .listen((event) {
+                                      print(event);
+                                    });
+
+                                    // val--;
+                                    // // updateQuatityDetail(quantity: val);
+                                    // if (val <= 0) {
+                                    //   val = 1;
+                                    // }
+                                    // _addtoCart.updateQuantity(
+                                    //     whatSign: false,
+                                    //     name: widget.name,
+                                    //     price: widget.price,
+                                    //     quantity: val);
+                                    // setState(() {});
                                   },
                                   icon: const Icon(
                                     Icons.remove,

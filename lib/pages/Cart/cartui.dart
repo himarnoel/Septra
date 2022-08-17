@@ -134,14 +134,18 @@ class _CartCardState extends State<CartCard> {
                                     IconButton(
                                         splashRadius: 10,
                                         onPressed: () {
-                                          var minus;
-                                          minus = widget.i["Quantity"];
-                                          minus--;
-                                          var price = widget.i["price"] / val;
+                                          double price =
+                                              widget.i["price"] / val;
+                                          val--;
+                                          if (val <= 0) {
+                                            val = 1;
+                                          }
+                                          setState(() {});
                                           _addtoCart.updateQuantity(
+                                              whatSign: false,
                                               name: widget.i["name"],
-                                              price: price,
-                                              quantity: minus);
+                                              price: price.toInt(),
+                                              quantity: val);
 
                                           setState(() {});
                                         },
@@ -159,15 +163,14 @@ class _CartCardState extends State<CartCard> {
                                         iconSize: 18,
                                         splashRadius: 10,
                                         onPressed: () {
-                                          var plus = 1;
-                                          setState(() {
-                                            plus = widget.i["Quantity"];
-                                          });
-                                          plus++;
+                                          val = widget.i["Quantity"];
+                                          val++;
+                                          var price = widget.i["price"] * val;
                                           _addtoCart.updateQuantity(
+                                              whatSign: true,
                                               name: widget.i["name"],
-                                              price: widget.i["price"],
-                                              quantity: plus);
+                                              price: price,
+                                              quantity: val);
                                           setState(() {});
                                         },
                                         icon: const Icon(
@@ -294,18 +297,21 @@ class _RemoveState extends State<Remove> {
                                 IconButton(
                                     splashRadius: 10,
                                     onPressed: () {
-                                      var minus;
-                                      setState(() {
-                                        minus = widget.i["Quantity"];
-                                        minus--;
-                                      });
-                                      print(minus);
-                                      _addtoCart.updateQuantity(
-                                          name: widget.i["name"],
-                                          price: widget.i["price"],
-                                          quantity: minus);
-
+                                      double price = widget.i["price"] / val;
+                                      val--;
+                                      if (val <= 0) {
+                                        val = 1;
+                                      }
                                       setState(() {});
+                                      _addtoCart.updateQuantity(
+                                          whatSign: false,
+                                          name: widget.i["name"],
+                                          price: price.toInt(),
+                                          quantity: val);
+
+
+
+                                     
                                     },
                                     icon: const Icon(
                                       Icons.remove,
@@ -321,15 +327,14 @@ class _RemoveState extends State<Remove> {
                                     iconSize: 18,
                                     splashRadius: 10,
                                     onPressed: () {
-                                      var plus = 1;
-                                      setState(() {
-                                        plus = widget.i["Quantity"];
-                                      });
-                                      plus++;
+                                      val = widget.i["Quantity"];
+                                      val++;
+                                      var price = widget.i["price"] * val;
                                       _addtoCart.updateQuantity(
+                                          whatSign: true,
                                           name: widget.i["name"],
-                                          price: widget.i["price"],
-                                          quantity: plus);
+                                          price: price,
+                                          quantity: val);
                                       setState(() {});
                                     },
                                     icon: const Icon(
