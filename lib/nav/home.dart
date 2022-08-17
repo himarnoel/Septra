@@ -28,11 +28,13 @@ class _HomeState extends State<Home> {
     var documentStream = FirebaseFirestore.instance
         .collection('Cart')
         .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('cart')
         .snapshots()
         .listen((event) {
-      length = event.data()!['cart'].length;
+      length = event.docs.length;
       setState(() {});
     });
+
     try {
       if (list.isNotEmpty) {
         list.clear();
@@ -215,23 +217,25 @@ class _HomeState extends State<Home> {
                         SizedBox(
                           height: height / 23,
                         ),
-                        Container(
-                          height: height / 1.7,
-                          width: width,
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GridView.builder(
-                                physics: const AlwaysScrollableScrollPhysics(),
-                                itemCount: list.length,
-                                padding: const EdgeInsets.all(8),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisSpacing: 10,
-                                        childAspectRatio: 0.75,
-                                        mainAxisSpacing: 10,
-                                        crossAxisCount: 2),
-                                itemBuilder: (_, i) => Place(index: i)),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            height: height * 1.2,
+                            width: width,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GridView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: list.length,
+                                  padding: const EdgeInsets.all(8),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisSpacing: 10,
+                                          childAspectRatio: 0.75,
+                                          mainAxisSpacing: 10,
+                                          crossAxisCount: 2),
+                                  itemBuilder: (_, i) => Place(index: i)),
+                            ),
                           ),
                         )
                       ],

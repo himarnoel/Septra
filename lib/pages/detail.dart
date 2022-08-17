@@ -11,7 +11,7 @@ import 'Cart/cart.dart';
 class Detail extends StatefulWidget {
   static String id = "detail";
   final String name;
-  final String price;
+  final int price;
   final String image;
   const Detail({
     Key? key,
@@ -27,16 +27,6 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> {
   var store = FirebaseFirestore.instance.collection('Cart');
   var length = 0;
-  fetch() {
-    var documentStream = FirebaseFirestore.instance
-        .collection('Cart')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .snapshots()
-        .listen((event) {
-      length = event.data()!['cart'].length;
-      setState(() {});
-    });
-  }
 
   final AddtoCart _addtoCart = AddtoCart();
   int val = 1;
@@ -45,7 +35,6 @@ class _DetailState extends State<Detail> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    fetch();
   }
 
   @override
@@ -66,23 +55,35 @@ class _DetailState extends State<Detail> {
                     Icons.shopping_cart,
                     size: 30,
                   )),
-              length == 0
-                  ? SizedBox()
-                  : Padding(
+              StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('Cart')
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .collection('cart')
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return Padding(
                       padding: const EdgeInsets.only(top: 6.0, left: 30),
                       child: Container(
                           height: getProportionateScreenHeight(18),
                           width: getProportionateScreenWidth(18),
                           child: Center(
                             child: Text(
-                              length.toString(),
+                              snapshot.data!.docs.length.toString(),
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.red.shade500)),
-                    )
+                    );
+                  })
             ],
           ),
           const SizedBox(
@@ -188,11 +189,11 @@ class _DetailState extends State<Detail> {
                                   iconSize: 18,
                                   splashRadius: 10,
                                   onPressed: () {
-                                    store
-                                        .doc(FirebaseAuth
-                                            .instance.currentUser!.uid)
-                                        .update({"Quantity": val});
                                     val++;
+                                    _addtoCart.updateQuantity(
+                                        name: widget.name,
+                                        price: widget.price,
+                                        quantity: val);
                                     setState(() {});
                                   },
                                   icon: const Icon(
@@ -208,9 +209,14 @@ class _DetailState extends State<Detail> {
                                   splashRadius: 10,
                                   onPressed: () {
                                     val--;
-                                    if (val == -1) {
+                                    // updateQuatityDetail(quantity: val);
+                                    if (val <= 0) {
                                       val = 0;
                                     }
+                                    _addtoCart.updateQuantity(
+                                        name: widget.name,
+                                        price: widget.price,
+                                        quantity: val);
                                     setState(() {});
                                   },
                                   icon: const Icon(
@@ -232,7 +238,7 @@ class _DetailState extends State<Detail> {
                             style: TextStyle(fontSize: 10),
                           ),
                           subtitle: Text(
-                            "\$ ${widget.price}",
+                            "\$ ${widget.price.toString()}",
                             style: const TextStyle(
                                 fontSize: 18, color: Colors.black),
                           ),
@@ -247,6 +253,8 @@ class _DetailState extends State<Detail> {
                                   borderRadius: BorderRadius.circular(10))),
                           onPressed: () {
                             _addtoCart.addtoCart(
+                                context: context,
+                                quantity: val,
                                 name: widget.name,
                                 image: widget.image,
                                 price: widget.price);

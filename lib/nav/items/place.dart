@@ -72,7 +72,7 @@ class Place extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                     subtitle: Text(
-                      "\$ ${list[index].price}",
+                      "\$ ${list[index].price.toString()}",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),

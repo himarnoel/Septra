@@ -19,30 +19,8 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
-  fetch() {
-    model.clear();
-    var documentStream = FirebaseFirestore.instance
-        .collection('Cart')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .snapshots()
-        .listen((event) {
-      event.data()!['cart'].forEach(
-        (e) {
-          model.add(CartModel.fromMap(e));
-        },
-      );
-      setState(() {});
-    });
-  }
-
   int val = 1;
   final SizeConfig size = SizeConfig();
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    fetch();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,15 +32,30 @@ class _CartState extends State<Cart> {
       ),
       body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewport) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: ListView.builder(
-            itemCount: model.length,
-            itemBuilder: (context, index) {
-              return CartCard(viewport: viewport, i: index);
-            },
-          ),
-        );
+        return StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('Cart')
+                .doc(FirebaseAuth.instance.currentUser!.uid)
+                .collection('cart')
+                .snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              final data = snapshot.data;
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: ListView.builder(
+                  itemCount: snapshot.data?.size,
+                  itemBuilder: (context, i) {
+                    return CartCard(viewport: viewport, i: data!.docs[i]);
+                  },
+                ),
+              );
+            });
       }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Container(
@@ -70,15 +63,35 @@ class _CartState extends State<Cart> {
         color: Colors.white,
         child: Row(
           children: [
-            const Expanded(
-              child: ListTile(
-                title: Text("Total Price"),
-                subtitle: Text(
-                  "\$585.00",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
+            StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('Cart')
+                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .collection('cart')
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  var price = 0;
+                  snapshot.data?.docs.forEach((e) {
+                    price += e.get('price') as int;
+                  });
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  return Expanded(
+                    child: ListTile(
+                      title: Text("Total Price"),
+                      subtitle: Text(
+                        "\$ ${price}",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  );
+                }),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     primary: Colors.black,
