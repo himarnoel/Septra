@@ -34,7 +34,6 @@ class _HomeState extends State<Home> {
       length = event.docs.length;
       setState(() {});
     });
-
     try {
       if (list.isNotEmpty) {
         list.clear();
@@ -43,18 +42,18 @@ class _HomeState extends State<Home> {
             .get()
             .then((value) => value.docs.forEach((e) {
                   list.add(Product.fromMap(e.data()));
-                  setState(() {});
+                    setState(() {});
                 }));
-        setState(() {});
+      
       } else {
         _get
             .collection("Products")
             .get()
             .then((value) => value.docs.forEach((e) {
                   list.add(Product.fromMap(e.data()));
-                  setState(() {});
+                    setState(() {});
                 }));
-        setState(() {});
+      
       }
       return 1;
     } catch (e) {

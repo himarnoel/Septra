@@ -79,7 +79,7 @@ class AddtoCart with ChangeNotifier {
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection("cart")
           .doc(name)
-          .update({"price": (quantity * price), "Quantity": quantity});
+          .update({"price": price, "Quantity": quantity});
       Fluttertoast.showToast(
           msg: "Added 1 quantity",
           toastLength: Toast.LENGTH_SHORT,
