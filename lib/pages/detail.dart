@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:septra/Service/provider/quantity.dart';
 import 'package:septra/pages/Cart/addtoCart.dart';
 
 import 'package:septra/utils/helpers.dart';
@@ -29,7 +30,7 @@ class _DetailState extends State<Detail> {
   var length = 0;
 
   final AddtoCart _addtoCart = AddtoCart();
-  int val = 1;
+  int quantity = 1;
   SizeConfig sizeConfig = SizeConfig();
   @override
   void initState() {
@@ -188,59 +189,90 @@ class _DetailState extends State<Detail> {
                               IconButton(
                                   iconSize: 18,
                                   splashRadius: 10,
-                                  onPressed: () {
-                                    val++;
-                                    _addtoCart.updateQuantity(
-                                        whatSign: true,
-                                        name: widget.name,
-                                        price: widget.price * val,
-                                        quantity: val);
-                                    setState(() {});
-
-                                    //     val = widget.i["Quantity"];
-                                    // val++;
-                                    // var price = widget.i["price"] * val;
-                                    // _addtoCart.updateQuantity(
-                                    //     whatSign: true,
-                                    //     name: widget.i["name"],
-                                    //     price: price,
-                                    //     quantity: val);
-                                    // setState(() {});
-                                  },
-                                  icon: const Icon(
-                                    Icons.add,
-                                    size: 18,
-                                  )),
-                              Text(
-                                val.toString(),
-                                style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              IconButton(
-                                  splashRadius: 10,
-                                  onPressed: () {
-                                    FirebaseFirestore.instance
+                                  onPressed: () async {
+                                    var price;
+                                    await FirebaseFirestore.instance
                                         .collection('Cart')
                                         .doc(FirebaseAuth
                                             .instance.currentUser!.uid)
                                         .collection("cart")
                                         .doc(widget.name)
-                                        .snapshots()
-                                        .listen((event) {
-                                      print(event);
+                                        .get()
+                                        .then((value) {
+                                      price = value.data()!['price'];
+                                      quantity = value.data()!['Quantity'];
                                     });
 
-                                    // val--;
-                                    // // updateQuatityDetail(quantity: val);
-                                    // if (val <= 0) {
-                                    //   val = 1;
-                                    // }
-                                    // _addtoCart.updateQuantity(
-                                    //     whatSign: false,
-                                    //     name: widget.name,
-                                    //     price: widget.price,
-                                    //     quantity: val);
-                                    // setState(() {});
+                                    quantity++;
+                                    var nPrice = price * quantity;
+                                    _addtoCart.updateQuantity(
+                                        whatSign: true,
+                                        name: widget.name,
+                                        price: nPrice,
+                                        quantity: quantity);
+                                    setState(() {});
+                                  },
+                                  icon: const Icon(
+                                    Icons.add,
+                                    size: 18,
+                                  )),
+                              StreamBuilder(
+                                  stream: FirebaseFirestore.instance
+                                      .collection('Cart')
+                                      .doc(FirebaseAuth
+                                          .instance.currentUser!.uid)
+                                      .collection('cart')
+                                      .snapshots(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                                    var quant;
+                                    for (var e in snapshot.data!.docs) {
+                                      if (e['name'] == widget.name) {
+                                        quant = e['Quantity'];
+                                      }
+                                    }
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                    return Text(
+                                      quant.toString(),
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  }),
+                              IconButton(
+                                  splashRadius: 10,
+                                  onPressed: () async {
+                                    var price;
+                                    await FirebaseFirestore.instance
+                                        .collection('Cart')
+                                        .doc(FirebaseAuth
+                                            .instance.currentUser!.uid)
+                                        .collection("cart")
+                                        .doc(widget.name)
+                                        .get()
+                                        .then((value) {
+                                      price = value.data()!['price'];
+                                      quantity = value.data()!['Quantity'];
+                                    });
+
+                                    double nPrice = price / quantity;
+                                    print(nPrice);
+                                    quantity--;
+
+                                    if (quantity <= 0) {
+                                      quantity = 1;
+                                    }
+                                    _addtoCart.updateQuantity(
+                                        whatSign: false,
+                                        name: widget.name,
+                                        price: nPrice.toInt(),
+                                        quantity: quantity);
+
+                                    setState(() {});
                                   },
                                   icon: const Icon(
                                     Icons.remove,
@@ -277,7 +309,7 @@ class _DetailState extends State<Detail> {
                           onPressed: () {
                             _addtoCart.addtoCart(
                                 context: context,
-                                quantity: val,
+                                quantity: quantity,
                                 name: widget.name,
                                 image: widget.image,
                                 price: widget.price);

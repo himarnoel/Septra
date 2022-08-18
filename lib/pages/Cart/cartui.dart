@@ -134,8 +134,12 @@ class _CartCardState extends State<CartCard> {
                                     IconButton(
                                         splashRadius: 10,
                                         onPressed: () {
-                                          double price =
-                                              widget.i["price"] / val;
+                                          val = widget.i["Quantity"];
+                                          var price = widget.i["price"];
+                                          print("fsdfasdfa");
+                                          print(val);
+
+                                          double nPrice = price / val;
                                           val--;
                                           if (val <= 0) {
                                             val = 1;
@@ -144,7 +148,7 @@ class _CartCardState extends State<CartCard> {
                                           _addtoCart.updateQuantity(
                                               whatSign: false,
                                               name: widget.i["name"],
-                                              price: price.toInt(),
+                                              price: nPrice.toInt(),
                                               quantity: val);
 
                                           setState(() {});
@@ -209,188 +213,237 @@ class _RemoveState extends State<Remove> {
   final AddtoCart _addtoCart = AddtoCart();
   SizeConfig sizeConfig = SizeConfig();
   int val = 1;
-
+  dynamic price;
+  dynamic quantity;
   @override
   Widget build(BuildContext context) {
     sizeConfig.init(context);
     return Container(
-      height: getProportionateScreenHeight(300),
-      width: double.infinity,
-      decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30), topRight: Radius.circular(30))),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          const Text("Remove From Cart?",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          Container(
-            height: getProportionateScreenHeight(120),
-            width: getProportionateScreenWidth(320),
-            padding: const EdgeInsets.only(
-              left: 8,
-            ),
-            decoration: BoxDecoration(boxShadow: [
-              BoxShadow(
-                color: const Color.fromARGB(255, 232, 230, 230).withOpacity(1),
-                spreadRadius: 0,
-                blurRadius: 2,
-                offset: const Offset(0, 0), // changes position of shadow
-              ),
-            ], color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: Row(
-              children: [
-                Container(
-                  height: getProportionateScreenHeight(100),
-                  width: getProportionateScreenWidth(100),
-                  child: Image.network(
-                    widget.i["image"],
-                    scale: 8,
-                  ),
-                  decoration: BoxDecoration(
-                      color: Colors.black12,
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        SizedBox(
-                          width: getProportionateScreenWidth(8),
-                          height: getProportionateScreenHeight(55),
-                        ),
-                        Text(
-                          widget.i["name"],
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w500),
-                        ),
-                        SizedBox(
-                          width: getProportionateScreenWidth(40),
-                        ),
-                      ],
+        height: getProportionateScreenHeight(300),
+        width: double.infinity,
+        decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+        child: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('Cart')
+                .doc(FirebaseAuth.instance.currentUser!.uid)
+                .collection('cart')
+                .snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              for (var e in snapshot.requireData.docs) {
+                if (e['name'] == widget.i['name']) {
+                  price = e['price'];
+                  quantity = e['Quantity'];
+                }
+              }
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Text("Remove From Cart?",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Container(
+                    height: getProportionateScreenHeight(120),
+                    width: getProportionateScreenWidth(320),
+                    padding: const EdgeInsets.only(
+                      left: 8,
                     ),
-                    const Spacer(),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color.fromARGB(255, 232, 230, 230)
+                                .withOpacity(1),
+                            spreadRadius: 0,
+                            blurRadius: 2,
+                            offset: const Offset(
+                                0, 0), // changes position of shadow
+                          ),
+                        ],
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Row(
                       children: [
-                        SizedBox(
-                          width: getProportionateScreenWidth(15),
-                        ),
-                        Text(
-                          widget.i["price"].toString(),
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        SizedBox(
-                          width: getProportionateScreenWidth(36),
-                        ),
                         Container(
-                            margin: const EdgeInsets.only(bottom: 10),
-                            height: getProportionateScreenHeight(38),
-                            decoration: BoxDecoration(
-                                color: Colors.black12,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Row(
+                          height: getProportionateScreenHeight(100),
+                          width: getProportionateScreenWidth(100),
+                          child: Image.network(
+                            widget.i["image"],
+                            scale: 8,
+                          ),
+                          decoration: BoxDecoration(
+                              color: Colors.black12,
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                IconButton(
-                                    splashRadius: 10,
-                                    onPressed: () {
-                                      double price = widget.i["price"] / val;
-                                      val--;
-                                      if (val <= 0) {
-                                        val = 1;
-                                      }
-                                      setState(() {});
-                                      _addtoCart.updateQuantity(
-                                          whatSign: false,
-                                          name: widget.i["name"],
-                                          price: price.toInt(),
-                                          quantity: val);
-
-
-
-                                     
-                                    },
-                                    icon: const Icon(
-                                      Icons.remove,
-                                      size: 18,
-                                    )),
+                                SizedBox(
+                                  width: getProportionateScreenWidth(8),
+                                  height: getProportionateScreenHeight(55),
+                                ),
                                 Text(
-                                  widget.i["Quantity"].toString(),
+                                  widget.i["name"],
                                   style: const TextStyle(
                                       fontSize: 18,
-                                      fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.w500),
                                 ),
-                                IconButton(
-                                    iconSize: 18,
-                                    splashRadius: 10,
-                                    onPressed: () {
-                                      val = widget.i["Quantity"];
-                                      val++;
-                                      var price = widget.i["price"] * val;
-                                      _addtoCart.updateQuantity(
-                                          whatSign: true,
-                                          name: widget.i["name"],
-                                          price: price,
-                                          quantity: val);
-                                      setState(() {});
-                                    },
-                                    icon: const Icon(
-                                      Icons.add,
-                                      size: 18,
+                                SizedBox(
+                                  width: getProportionateScreenWidth(40),
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                SizedBox(
+                                  width: getProportionateScreenWidth(15),
+                                ),
+                                Text(
+                                  price.toString(),
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                                SizedBox(
+                                  width: getProportionateScreenWidth(36),
+                                ),
+                                Container(
+                                    margin: const EdgeInsets.only(bottom: 10),
+                                    height: getProportionateScreenHeight(38),
+                                    decoration: BoxDecoration(
+                                        color: Colors.black12,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Row(
+                                      children: [
+                                        IconButton(
+                                            splashRadius: 10,
+                                            onPressed: () async {
+                                              var price;
+                                              await FirebaseFirestore.instance
+                                                  .collection('Cart')
+                                                  .doc(FirebaseAuth.instance
+                                                      .currentUser!.uid)
+                                                  .collection("cart")
+                                                  .doc(widget.i['name'])
+                                                  .get()
+                                                  .then((value) {
+                                                price = value.data()!['price'];
+                                              });
+
+                                              double nPrice = price / val;
+                                              print(nPrice);
+                                              val--;
+
+                                              if (val <= 0) {
+                                                val = 1;
+                                              }
+                                              _addtoCart.updateQuantity(
+                                                  whatSign: false,
+                                                  name: widget.i['name'],
+                                                  price: nPrice.toInt(),
+                                                  quantity: val);
+                                            },
+                                            icon: const Icon(
+                                              Icons.remove,
+                                              size: 18,
+                                            )),
+                                        Text(
+                                          quantity.toString(),
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        IconButton(
+                                            iconSize: 18,
+                                            splashRadius: 10,
+                                            onPressed: () async {
+                                              var price;
+                                              await FirebaseFirestore.instance
+                                                  .collection('Cart')
+                                                  .doc(FirebaseAuth.instance
+                                                      .currentUser!.uid)
+                                                  .collection("cart")
+                                                  .doc(widget.i['name'])
+                                                  .get()
+                                                  .then((value) {
+                                                price = value.data()!['price'];
+                                                val = value.data()!['Quantity'];
+                                              });
+
+                                              val++;
+                                              var nPrice = price * val;
+                                              _addtoCart.updateQuantity(
+                                                  whatSign: true,
+                                                  name: widget.i['name'],
+                                                  price: nPrice,
+                                                  quantity: val);
+                                              setState(() {});
+                                            },
+                                            icon: const Icon(
+                                              Icons.add,
+                                              size: 18,
+                                            )),
+                                      ],
                                     )),
                               ],
-                            )),
+                            ),
+                          ],
+                        )
                       ],
                     ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          // Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    primary: Color(0XFFFE7E7E7),
-                    minimumSize: Size(getProportionateScreenWidth(92),
-                        getProportionateScreenHeight(60)),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10))),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "Cancel",
-                  style: TextStyle(fontSize: 15.8),
-                ),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    primary: Colors.black,
-                    minimumSize: Size(getProportionateScreenWidth(92),
-                        getProportionateScreenHeight(60)),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10))),
-                onPressed: () {
-                  widget.i.reference.delete();
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "Yes,  Remove",
-                  style: TextStyle(color: Colors.white),
-                ),
-              )
-            ],
-          )
-        ],
-      ),
-    );
+                  ),
+                  // Spacer(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            primary: Color(0XFFFE7E7E7),
+                            minimumSize: Size(getProportionateScreenWidth(92),
+                                getProportionateScreenHeight(60)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "Cancel",
+                          style: TextStyle(fontSize: 15.8),
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            primary: Colors.black,
+                            minimumSize: Size(getProportionateScreenWidth(92),
+                                getProportionateScreenHeight(60)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                        onPressed: () {
+                          widget.i.reference.delete();
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "Yes,  Remove",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              );
+            }));
   }
 }
