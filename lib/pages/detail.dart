@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:septra/Service/provider/quantity.dart';
+
 import 'package:septra/pages/Cart/addtoCart.dart';
 
 import 'package:septra/utils/helpers.dart';

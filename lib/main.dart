@@ -1,6 +1,5 @@
 import 'package:provider/provider.dart';
 import 'package:septra/Service/Other_Service/gate.dart';
-import 'package:septra/Service/provider/quantity.dart';
 import 'package:septra/nav/nav.dart';
 import 'package:septra/pages/Cart/addtoCart.dart';
 import 'package:septra/pages/Cart/cart.dart';
