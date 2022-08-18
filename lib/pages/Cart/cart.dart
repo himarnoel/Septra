@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:septra/Service/auth/auth.dart';
 import 'package:septra/pages/Cart/cartmodel.dart';
+import 'package:septra/pages/checkout/checkout.dart';
 
 import '../../../utils/helpers.dart';
 import 'cartui.dart';
@@ -99,7 +100,9 @@ class _CartState extends State<Cart> {
                         getProportionateScreenHeight(60)),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context,Checkout.id);
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [

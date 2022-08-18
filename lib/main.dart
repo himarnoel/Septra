@@ -1,13 +1,12 @@
-import 'package:provider/provider.dart';
 import 'package:septra/Service/Other_Service/gate.dart';
 import 'package:septra/nav/nav.dart';
-import 'package:septra/pages/Cart/addtoCart.dart';
 import 'package:septra/pages/Cart/cart.dart';
 import 'package:septra/pages/land.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 import 'nav/home.dart';
+import 'pages/checkout/checkout.dart';
 import 'pages/signin.dart';
 import 'pages/signup.dart';
 import 'slider/caro.dart';
@@ -51,7 +50,8 @@ class MyApp extends StatelessWidget {
           Nav.id: (context) => const Nav(),
           Home.id: (context) => const Home(),
           Gate.id: (context) => const Gate(),
-          Cart.id: (context) => const Cart()
+          Cart.id: (context) => const Cart(),
+          Checkout.id:(context)=>const Checkout()
         });
   }
 }
