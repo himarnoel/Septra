@@ -33,60 +33,85 @@ class _CheckoutState extends State<Checkout> {
             minHeight: viewportConstraints.maxHeight,
           ),
           child: IntrinsicHeight(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Text(
-                  "Shipping Address",
-                  style: TextStyle(fontSize: 17),
-                ),
-                Card(
-                  elevation: 4,
-                  child: ListTile(
-                    leading: Icon(Icons.location_on),
-                    title: Text("Home"),
-                    subtitle: Text("6140 sunbrook Park Pc 5667"),
-                    trailing:
-                        IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Text(
+                    "Shipping Address",
+                    style: TextStyle(fontSize: 17),
                   ),
-                ),
-                const Text(
-                  "Order List",
-                  style: TextStyle(fontSize: 17),
-                ),
-                FutureBuilder(
-                    future: FirebaseFirestore.instance
-                        .collection('Cart')
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .collection('cart')
-                        .get(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.hasError) {
-                        return Text("Something went wrong");
-                      }
+                  Card(
+                    elevation: 4,
+                    child: ListTile(
+                      leading: Icon(Icons.location_on),
+                      title: Text("Home"),
+                      subtitle: Text("6140 sunbrook Park Pc 5667"),
+                      trailing:
+                          IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+                    ),
+                  ),
+                  const Text(
+                    "Shipping Fee",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  Card(
+                    elevation: 4,
+                    child: ListTile(
+                      leading: Icon(Icons.local_shipping),
+                      title: Text("Regular"),
+                      subtitle: Text("Estimated  Dec20-22"),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "\$100",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Text(
+                    "Order List",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  FutureBuilder(
+                      future: FirebaseFirestore.instance
+                          .collection('Cart')
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .collection('cart')
+                          .get(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasError) {
+                          return Text("Something went wrong");
+                        }
 
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        final data = snapshot.data!.docs;
-                        return Container(
-                          height: getProportionateScreenHeight(500),
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: data.length,
-                              itemBuilder: (context, i) {
-                                return OrderCard(
-                                    image: data[i]['image'],
-                                    name: data[i]['name'],
-                                    price: data[i]['price'].toString(),
-                                    quantity: data[i]['Quantity'].toString());
-                              }),
-                        );
-                      }
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          final data = snapshot.data!.docs;
+                          return Container(
+                            height: getProportionateScreenHeight(390),
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: data.length,
+                                itemBuilder: (context, i) {
+                                  return OrderCard(
+                                      image: data[i]['image'],
+                                      name: data[i]['name'],
+                                      price: data[i]['price'].toString(),
+                                      quantity: data[i]['Quantity'].toString());
+                                }),
+                          );
+                        }
 
-                      return Text("loading");
-                    })
-              ],
+                        return Text("loading");
+                      })
+                ],
+              ),
             ),
           ),
         ));
@@ -97,12 +122,12 @@ class _CheckoutState extends State<Checkout> {
         color: Colors.white,
         child: Row(
           children: [
-            StreamBuilder(
-                stream: FirebaseFirestore.instance
+            FutureBuilder(
+                future: FirebaseFirestore.instance
                     .collection('Cart')
                     .doc(FirebaseAuth.instance.currentUser!.uid)
                     .collection('cart')
-                    .snapshots(),
+                    .get(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   var price = 0;
@@ -119,7 +144,7 @@ class _CheckoutState extends State<Checkout> {
                     child: ListTile(
                       title: Text("Total Price"),
                       subtitle: Text(
-                        "\$ ${price}",
+                        "\$ ${price + 100}",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
@@ -140,14 +165,14 @@ class _CheckoutState extends State<Checkout> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
                     Text(
-                      "Checkout",
+                      "Continue with payement",
                       style: TextStyle(color: Colors.white),
                     ),
                     SizedBox(
                       width: 10,
                     ),
                     Icon(
-                      Icons.arrow_right,
+                      Icons.payment,
                       color: Colors.white,
                       size: 30,
                     ),
