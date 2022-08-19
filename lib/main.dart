@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
           Home.id: (context) => const Home(),
           Gate.id: (context) => const Gate(),
           Cart.id: (context) => const Cart(),
-          Checkout.id:(context)=>const Checkout()
+          Checkout.id: (context) => const Checkout()
         });
   }
 }

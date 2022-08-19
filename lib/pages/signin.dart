@@ -36,7 +36,9 @@ class _LoginState extends State<Login> {
           elevation: 0,
           centerTitle: true,
           title: const Text(
-            "Login",    style: TextStyle(           fontSize: 40, color: Colors.black, fontWeight: FontWeight.bold),
+            "Login",
+            style: TextStyle(
+                fontSize: 40, color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ),
         body: LayoutBuilder(
@@ -62,20 +64,22 @@ class _LoginState extends State<Login> {
                             control: _email,
                             obscured: false,
                             keyboardType: TextInputType.emailAddress,
-                            hintpext: "Email", valid: (value) {  },
+                            hintpext: "Email",
+                            valid: (value) {},
                           ),
                           Input(
                             control: _pass,
                             obscured: true,
                             keyboardType: TextInputType.visiblePassword,
-                            hintpext: "Password", valid: (value) {  },
+                            hintpext: "Password",
+                            valid: (value) {},
                           ),
                           Buttonn(
-                          
                             text: text * 20,
                             texp: "Login",
                             onPressed: () {
-                              // _auth.login(_email.text.trim(), _pass.text.trim(), context);
+                              _auth.login(_email.text.trim(), _pass.text.trim(),
+                                  context);
                               Navigator.pushNamed(context, Nav.id);
                             },
                           ),
@@ -90,7 +94,6 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     Buttonn(
-                     
                       text: text * 20,
                       texp: "Sign in with Google",
                       onPressed: () {
@@ -101,7 +104,6 @@ class _LoginState extends State<Login> {
                       height: getProportionateScreenHeight(10),
                     ),
                     Buttonn(
-                     
                       text: text * 20,
                       texp: " Sign in with Facebook",
                       onPressed: () {

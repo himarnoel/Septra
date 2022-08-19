@@ -28,7 +28,7 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> {
   var store = FirebaseFirestore.instance.collection('Cart');
   var length = 0;
-
+  int val = 1;
   final AddtoCart _addtoCart = AddtoCart();
   int quantity = 1;
   SizeConfig sizeConfig = SizeConfig();
@@ -237,7 +237,9 @@ class _DetailState extends State<Detail> {
                                       );
                                     }
                                     return Text(
-                                      quant.toString(),
+                                      quant == null
+                                          ? val.toString()
+                                          : quant.toString(),
                                       style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold),
