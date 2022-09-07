@@ -5,3 +5,9 @@
 ## Payment Gateway
 
 ### The app uses Paystack as it's payment gateway
+
+### To try out the payment use this dummy card
+
+### Card no: 408 408 408 408 408 1
+
+### EXPIRY: 09/23 CVV:408
