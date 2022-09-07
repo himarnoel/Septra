@@ -1,4 +1,5 @@
 import 'package:septra/Service/Other_Service/gate.dart';
+
 import 'package:septra/nav/nav.dart';
 import 'package:septra/pages/Cart/cart.dart';
 import 'package:septra/pages/land.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
           // "hot reload" (press "r" in the console where you ran "flutter run",
           // or simply save your changes to "hot reload" in a Flutter IDE).
           // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
+          // is not restarted.k
           primarySwatch: Colors.grey,
         ),
         initialRoute: Caoursel.id,
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
           Home.id: (context) => const Home(),
           Gate.id: (context) => const Gate(),
           Cart.id: (context) => const Cart(),
-          Checkout.id: (context) => const Checkout()
+          Checkout.id: (context) => const Checkout(),
         });
   }
 }

@@ -78,50 +78,64 @@ class _HomeState extends State<Home> {
             ? Errori()
             : Scaffold(
                 backgroundColor: Colors.white,
-                appBar: AppBar(
-                  title: const Text(
-                    "Welcome, Seyi",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  elevation: 0,
-                  backgroundColor: Colors.white,
-                  actions: [
-                    Stack(
-                      children: [
-                        IconButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, Cart.id);
-                            },
-                            icon: const Icon(
-                              Icons.shopping_cart,
-                              size: 30,
-                            )),
-                        length == 0
-                            ? SizedBox.shrink()
-                            : Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 6.0, left: 30),
-                                child: Container(
-                                    height: getProportionateScreenHeight(18),
-                                    width: getProportionateScreenWidth(18),
-                                    // ignore: sort_child_properties_last
-                                    child: Center(
-                                      child: Text(
-                                        length.toString(),
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.red.shade500)),
-                              )
+                appBar:FutureBuilder(
+                      future: FirebaseFirestore.instance
+                          .collection('Cart')
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .collection('cart')
+                          .get(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasError) {
+                          return Text("Something went wrong");
+                        }
+
+                    return AppBar(
+                      title: const Text(
+                        "Welcome, Seyi",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      elevation: 0,
+                      backgroundColor: Colors.white,
+                      actions: [
+                        Stack(
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, Cart.id);
+                                },
+                                icon: const Icon(
+                                  Icons.shopping_cart,
+                                  size: 30,
+                                )),
+                            length == 0
+                                ? SizedBox.shrink()
+                                : Padding(
+                                    padding:
+                                        const EdgeInsets.only(top: 6.0, left: 30),
+                                    child: Container(
+                                        height: getProportionateScreenHeight(18),
+                                        width: getProportionateScreenWidth(18),
+                                        // ignore: sort_child_properties_last
+                                        child: Center(
+                                          child: Text(
+                                            length.toString(),
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            color: Colors.red.shade500)),
+                                  )
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        )
                       ],
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    )
-                  ],
-                  actionsIconTheme: const IconThemeData(color: Colors.black),
+                      actionsIconTheme: const IconThemeData(color: Colors.black),
+                    );
+                  }
                 ),
                 body: SingleChildScrollView(
                   child: SizedBox(

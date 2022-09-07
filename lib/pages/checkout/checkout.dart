@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:septra/Service/payment.dart/meth.dart';
 
 import '../../utils/helpers.dart';
 
@@ -49,8 +50,14 @@ class _CheckoutState extends State<Checkout> {
                       leading: Icon(Icons.location_on),
                       title: Text("Home"),
                       subtitle: Text("6140 sunbrook Park Pc 5667"),
-                      trailing:
-                          IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+                      trailing: IconButton(
+                          onPressed: () {
+                           
+
+                          
+                           
+                          },
+                          icon: Icon(Icons.edit)),
                     ),
                   ),
                   const Text(
@@ -66,8 +73,8 @@ class _CheckoutState extends State<Checkout> {
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            "\$100",
+                          const Text(
+                            "₦100",
                             style: TextStyle(fontSize: 20),
                           ),
                           IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
@@ -120,66 +127,73 @@ class _CheckoutState extends State<Checkout> {
       floatingActionButton: Container(
         padding: const EdgeInsets.only(left: 8, right: 8),
         color: Colors.white,
-        child: Row(
-          children: [
-            FutureBuilder(
-                future: FirebaseFirestore.instance
-                    .collection('Cart')
-                    .doc(FirebaseAuth.instance.currentUser!.uid)
-                    .collection('cart')
-                    .get(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  var price = 0;
-                  snapshot.data?.docs.forEach((e) {
-                    price += e.get('price') as int;
-                  });
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-
-                  return Expanded(
+        child: FutureBuilder(
+            future: FirebaseFirestore.instance
+                .collection('Cart')
+                .doc(FirebaseAuth.instance.currentUser!.uid)
+                .collection('cart')
+                .get(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              var price = 0;
+              snapshot.data?.docs.forEach((e) {
+                price += e.get('price') as int;
+              });
+              price = price + 100;
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return Row(
+                children: [
+                  Expanded(
                     child: ListTile(
                       title: Text("Total Price"),
                       subtitle: Text(
-                        "\$ ${price + 100}",
+                        "₦ ${price}",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
-                  );
-                }),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: Colors.black,
-                    minimumSize: Size(getProportionateScreenWidth(92),
-                        getProportionateScreenHeight(60)),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10))),
-                onPressed: () {
-                  Navigator.pushNamed(context, Checkout.id);
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
-                      "Continue with payement",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Icon(
-                      Icons.payment,
-                      color: Colors.white,
-                      size: 30,
-                    ),
-                  ],
-                ))
-          ],
-        ),
+                  ),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.black,
+                          minimumSize: Size(getProportionateScreenWidth(92),
+                              getProportionateScreenHeight(60)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                      onPressed: () async {
+                        var val = await PayNow(
+                                email:
+                                    FirebaseAuth.instance.currentUser!.email!,
+                                price: price * 100,
+                                ctx: context)
+                            .chargeNow(context);
+
+                        print("dfdfdf" + val);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Text(
+                            "Continue with payement",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Icon(
+                            Icons.payment,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ],
+                      ))
+                ],
+              );
+            }),
       ),
     );
   }
@@ -262,7 +276,7 @@ class _OrderCardState extends State<OrderCard> {
                         width: getProportionateScreenWidth(40),
                       ),
                       Text(
-                        "\$ ${widget.price}",
+                        "₦ ${widget.price}",
                         style: const TextStyle(fontSize: 19),
                       ),
                       SizedBox(

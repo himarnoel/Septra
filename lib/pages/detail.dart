@@ -295,7 +295,7 @@ class _DetailState extends State<Detail> {
                             style: TextStyle(fontSize: 10),
                           ),
                           subtitle: Text(
-                            "\$ ${widget.price.toString()}",
+                            "₦ ${widget.price.toString()}",
                             style: const TextStyle(
                                 fontSize: 18, color: Colors.black),
                           ),

@@ -86,7 +86,7 @@ class _CartState extends State<Cart> {
                     child: ListTile(
                       title: Text("Total Price"),
                       subtitle: Text(
-                        "\$ ${price}",
+                        "₦ ${price}",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
@@ -101,7 +101,7 @@ class _CartState extends State<Cart> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
                 onPressed: () {
-                  Navigator.pushNamed(context,Checkout.id);
+                  Navigator.pushNamed(context, Checkout.id);
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
